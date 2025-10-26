@@ -1,0 +1,28 @@
+version: "3.9"
+
+# -------------------------------------------------------------------------------------
+# serviço de IA (api de anomalias)
+services:
+  ai-service:
+    build: ./ai-service # caminho do dockerfile para construir a imagem da API
+    container_name: logguardian-ai # nome do container 
+    ports:
+      - "8000:8000" # mapeamento de porta 8000 para a porta do container
+    command: uvicorn app:app --host 0.0.0.0 --port 8000
+    # inicia o servidor fastapi usando uvicon
+    volumes:
+      - ./ai-service:/app # monta o diretório local ai-service dentro do container
+    working_dir: /app # definindo o diretorio de trabalho dentro do container
+# -------------------------------------------------------------------------------------
+
+# cliente go (que envia logs à api) ---------------------------------------------------
+  go-client:
+    build: ./go-client # log client
+    container_name: logguardian-client # container client
+    depends_on:
+      - ai-service # garante que o serviço de IA suba primeiro que este
+    environment:
+      - AI_API_URL=http://ai-service:8000/predict # variável ambiente passada ao container go
+      # Define a URL da API de IA usada pelo programa Go para enviar logs
+      # "ai-service" é o nome do container de IA e funciona como hostname dentro da rede do Compose
+# -------------------------------------------------------------------------------------
