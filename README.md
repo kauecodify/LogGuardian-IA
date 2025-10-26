@@ -67,7 +67,7 @@ Log	Resultado	Interpretação
 O modelo usa Isolation Forest (algoritmo não supervisionado) para detectar anomalias em logs. Você pode treiná-lo com seus próprios dados históricos.
 
 # Passo 1: Prepare seus dados
-Crie um arquivo CSV com uma coluna chamada log contendo mensagens reais de log 
+Crie um arquivo CSV com uma coluna chamada log ("sample_logs") contendo mensagens reais de log 
 
 (exemplo):
 
